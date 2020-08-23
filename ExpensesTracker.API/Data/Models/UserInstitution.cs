@@ -6,8 +6,19 @@ namespace ExpensesTracker.API.Data.Models
 {
     public class UserInstitution : BaseEntity
     {
+        /// <summary>
+        /// Gets or Sets the IdentityId of the User
+        /// </summary>
         public Guid IdentityId { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the InstitutionId
+        /// </summary>
         public Guid InstitutionId {get; set;}
+
+        /// <summary>
+        /// Allows navigation to the Institution referenced by this User Institution
+        /// </summary>
         public virtual Institution Institution { get; set;}
     }
 

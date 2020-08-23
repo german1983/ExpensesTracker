@@ -1,0 +1,9 @@
+* text=auto encoding=UTF-8
+
+*.sh text eol=lf
+
+*.cs text diff=csharp
+
+*.png binary
+*.jpg binary
+*.gif binary
