@@ -1,10 +1,10 @@
-using System.Reflection;
-using ExpensesTracker.Identity.Data.Context;
 using ExpensesTracker.Identity.Data.Seed;
+using ExpensesTracker.Identity.Infrastructure.AspNetIdentity;
+using ExpensesTracker.Identity.Infrastructure.IdentityServer;
+using ExpensesTracker.Identity.Services.EmailService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,44 +13,46 @@ namespace ExpensesTracker.Identity
 {
     public class Startup
     {
+        private IConfiguration _configuration { get; }
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-        public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("IdentityContext");
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+            services.AddRazorPages();
 
-            services.AddDbContext<ApplicationDbContext>(builder =>
-                builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
+            services.Configure<AspNetIdentityOptions>(_configuration);
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.ConfigureAspNetIdentity(_configuration);
+            services.ConfigureIdentityServer(_configuration);
 
+            services.AddAuthentication()
+              .AddGoogle(options =>
+              {
+                  var googleAuthNSection = _configuration.GetSection("Authentication:Google");
 
-            var ids = services.AddIdentityServer()
-             .AddDeveloperSigningCredential();
+                  options.ClientId = googleAuthNSection["ClientId"];
+                  options.ClientSecret = googleAuthNSection["ClientSecret"];
+              });
 
-            ids.AddConfigurationStore(options => 
-                    options.ConfigureDbContext = builder => 
-                        builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
-                .AddOperationalStore(options => 
-                    options.ConfigureDbContext = builder => 
-                        builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly))
-                );
-            
-            // ASP.NET Identity integration
-            ids.AddAspNetIdentity<IdentityUser>();
+            // Configure from DB
+            services.AddCors(options =>
+            {
+                // this defines a CORS policy called "default"
+                options.AddPolicy("default", policy =>
+                {
+                    policy.WithOrigins("https://localhost:5003")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
-            services.AddControllersWithViews();
+            // Services
+            services.AddSingleton<IEmailSender, EmailSender>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -58,15 +60,20 @@ namespace ExpensesTracker.Identity
                 app.UseDeveloperExceptionPage();
             }
 
-            app.InitializeDbTestData();
+            app.InitializeDb();
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseRouting();
+            app.UseCors("default");
 
             app.UseIdentityServer();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+            app.UseEndpoints(endpoints => endpoints.MapRazorPages());
         }
     }
 }

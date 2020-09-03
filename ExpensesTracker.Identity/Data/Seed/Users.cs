@@ -10,16 +10,16 @@ namespace ExpensesTracker.Identity.Data.Seed
         public static List<TestUser> Get()
         {
             return new List<TestUser> {
-            new TestUser {
-                SubjectId = "5BE86359-073C-434B-AD2D-A3932222DABE",
-                Username = "german",
-                Password = "password",
-                Claims = new List<Claim> {
-                    new Claim(JwtClaimTypes.Email, "german1983@gmail.com"),
-                    new Claim(JwtClaimTypes.Role, "admin")
+                new TestUser {
+                    SubjectId = "5BE86359-073C-434B-AD2D-A3932222DABE",
+                    Username = "german",
+                    Password = "password",
+                    Claims = new List<Claim> {
+                        new Claim(JwtClaimTypes.Email, "german1983@gmail.com"),
+                        new Claim(JwtClaimTypes.Role, "admin")
+                    }
                 }
-            }
-        };
+            };
         }
     }
 }

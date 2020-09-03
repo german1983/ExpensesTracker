@@ -3,7 +3,6 @@ using ExpensesTracker.Identity.Data.Context;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +10,7 @@ namespace ExpensesTracker.Identity.Data.Seed
 {
     public static class SeederExtensionMethod
     {
-        internal static void InitializeDbTestData(this IApplicationBuilder app)
+        internal static void InitializeDb(this IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
 
@@ -57,20 +56,20 @@ namespace ExpensesTracker.Identity.Data.Seed
                 context.SaveChanges();
             }
 
-            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            if (!userManager.Users.Any())
-            {
-                foreach (var testUser in Users.Get())
-                {
-                    var identityUser = new IdentityUser(testUser.Username)
-                    {
-                        Id = testUser.SubjectId
-                    };
+            //var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            //if (!userManager.Users.Any())
+            //{
+            //    foreach (var testUser in Users.Get())
+            //    {
+            //        var identityUser = new IdentityUser(testUser.Username)
+            //        {
+            //            Id = testUser.SubjectId
+            //        };
 
-                    userManager.CreateAsync(identityUser, "Password123!").Wait();
-                    userManager.AddClaimsAsync(identityUser, testUser.Claims.ToList()).Wait();
-                }
-            }
+            //        userManager.CreateAsync(identityUser, "Password123!").Wait();
+            //        userManager.AddClaimsAsync(identityUser, testUser.Claims.ToList()).Wait();
+            //    }
+            //}
         }
     }
 }

@@ -15,7 +15,11 @@ namespace ExpensesTracker.Identity.Data.Seed
                 new IdentityResource
                 {
                     Name = "role",
-                    UserClaims = new List<string> {"role"}
+                    UserClaims = new [] {"role"}
+                },
+                new IdentityResource{
+                    Name = "german",
+                    UserClaims = new[] {"gclaim", "fclaim"}
                 }
             };
         }
