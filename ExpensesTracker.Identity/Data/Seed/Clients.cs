@@ -16,7 +16,7 @@ namespace ExpensesTracker.Identity.Data.Seed
                     ClientName = "Example client application using client credentials",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = new List<Secret> {new Secret("SuperSecretPassword".Sha256())}, // change me!
-                    AllowedScopes = new List<string> {"api1.read"}
+                    AllowedScopes = new List<string> {"api1"}
                 },
                 new Client
                 {
@@ -25,7 +25,7 @@ namespace ExpensesTracker.Identity.Data.Seed
                     ClientSecrets = new List<Secret> {new Secret("SuperSecretPassword".Sha256())}, // change me!
     
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris = new List<string> {"https://localhost:5004/signin-oidc"},
+                    RedirectUris = new List<string> {"https://localhost:5002/signin-oidc"},
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -56,6 +56,22 @@ namespace ExpensesTracker.Identity.Data.Seed
                         IdentityServerConstants.StandardScopes.Profile,
                         "api1.read",
                         "german"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "usrManager",
+                    ClientName = "User Manager Application",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    
+                    ClientSecrets = new List<Secret> {new Secret("SuperSecretPassword".Sha256())}, // change me!
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "identity",
+                        "identity.admin"
                     }
                 }
             };

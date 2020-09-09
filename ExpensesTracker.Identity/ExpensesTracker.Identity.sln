@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Shared", "..\ExpenseTracker.Shared\ExpenseTracker.Shared.csproj", "{865DD33F-43FA-4D16-A813-03205DAE5456}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{774F3E71-8178-4EFA-BFF5-E53A76AAC445}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{774F3E71-8178-4EFA-BFF5-E53A76AAC445}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{774F3E71-8178-4EFA-BFF5-E53A76AAC445}.Release|Any CPU.Build.0 = Release|Any CPU
+		{865DD33F-43FA-4D16-A813-03205DAE5456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{865DD33F-43FA-4D16-A813-03205DAE5456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{865DD33F-43FA-4D16-A813-03205DAE5456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{865DD33F-43FA-4D16-A813-03205DAE5456}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

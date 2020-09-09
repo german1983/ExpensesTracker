@@ -12,10 +12,10 @@ namespace ExpensesTracker.Identity.Data.Seed
             return new List<TestUser> {
                 new TestUser {
                     SubjectId = "5BE86359-073C-434B-AD2D-A3932222DABE",
-                    Username = "german",
-                    Password = "password",
+                    Username = "german1983+123@gmail.com",
+                    Password = "Pass123$",
                     Claims = new List<Claim> {
-                        new Claim(JwtClaimTypes.Email, "german1983@gmail.com"),
+                        new Claim(JwtClaimTypes.Email, "german1983+123@gmail.com"),
                         new Claim(JwtClaimTypes.Role, "admin")
                     }
                 }

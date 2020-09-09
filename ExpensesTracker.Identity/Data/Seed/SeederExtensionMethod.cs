@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ExpensesTracker.Identity.Data.Context;
+using ExpensesTracker.Identity.Data.Model;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -56,20 +59,21 @@ namespace ExpensesTracker.Identity.Data.Seed
                 context.SaveChanges();
             }
 
-            //var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            //if (!userManager.Users.Any())
-            //{
-            //    foreach (var testUser in Users.Get())
-            //    {
-            //        var identityUser = new IdentityUser(testUser.Username)
-            //        {
-            //            Id = testUser.SubjectId
-            //        };
+            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            if (!userManager.Users.Any())
+            {
+                foreach (var testUser in Users.Get())
+                {
+                    var identityUser = new ApplicationUser()
+                    {
+                        Id = new Guid(testUser.SubjectId),
+                        UserName = testUser.Username
+                    };
 
-            //        userManager.CreateAsync(identityUser, "Password123!").Wait();
-            //        userManager.AddClaimsAsync(identityUser, testUser.Claims.ToList()).Wait();
-            //    }
-            //}
+                    userManager.CreateAsync(identityUser, "Pass123$").Wait();
+                    userManager.AddClaimsAsync(identityUser, testUser.Claims.ToList()).Wait();
+                }
+            }
         }
     }
 }

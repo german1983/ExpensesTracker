@@ -1,0 +1,59 @@
+﻿@page
+@model ExpensesTracker.Identity.Areas.Identity.Pages.Account.DiagnosticModel
+@{
+}
+    <div class="diagnostics-page">
+        <div class="lead">
+            <h1>Authentication Cookie</h1>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Claims</h2>
+                    </div>
+                    <div class="card-body">
+                        <dl>
+                            @foreach (var claim in Model.Claims)
+                            {
+                                <dt>@claim.Type</dt>
+                                <dd>@claim.Value</dd>
+                            }
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Properties</h2>
+                    </div>
+                    <div class="card-body">
+                        <dl>
+                            @foreach (var prop in Model.Cookies)
+                            {
+                                <dt>@prop.Key</dt>
+                                <dd>@prop.Value</dd>
+                            }
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Access Token</h2>
+                    </div>
+                    <div class="card-body">
+                        <dl>
+                            <dt>Access Token</dt>
+                            <dd>@Model.AccessToken</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

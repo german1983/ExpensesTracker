@@ -1,10 +1,12 @@
 using ExpensesTracker.API.Data;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesTracker.API
 {
@@ -21,11 +23,23 @@ namespace ExpensesTracker.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication("Bearer", options =>
+                .AddJwtBearer("Bearer", options =>
                 {
-                    options.ApiName = "api1";
-                    options.Authority = "https://localhost:5000";
+                    options.Authority = "https://localhost:5001";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "api1.read");
+                });
+            });
 
             services.AddControllers();
 
