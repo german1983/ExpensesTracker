@@ -16,7 +16,7 @@ namespace ExpensesTracker.Identity.Data.Seed
                     ClientName = "Example client application using client credentials",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = new List<Secret> {new Secret("SuperSecretPassword".Sha256())}, // change me!
-                    AllowedScopes = new List<string> {"api1.read"}
+                    AllowedScopes = new List<string> {"api1"}
                 },
                 new Client
                 {
@@ -37,6 +37,42 @@ namespace ExpensesTracker.Identity.Data.Seed
 
                     RequirePkce = true,
                     AllowPlainTextPkce = false
+                },
+                // JavaScript Client
+                new Client
+                {
+                    ClientId = "js",
+                    ClientName = "Example JavaScript Client Application",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequireClientSecret = false,
+
+                    RedirectUris =           { "https://localhost:5003/callback.html" },
+                    PostLogoutRedirectUris = { "https://localhost:5003/index.html" },
+                    AllowedCorsOrigins =     { "https://localhost:5003" },
+
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "api1.read",
+                        "german"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "usrManager",
+                    ClientName = "User Manager Application",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    
+                    ClientSecrets = new List<Secret> {new Secret("SuperSecretPassword".Sha256())}, // change me!
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "identity",
+                        "identity.admin"
+                    }
                 }
             };
         }

@@ -6,8 +6,19 @@ namespace ExpensesTracker.API.Data.Models
 {
     public class UserCategory : BaseEntity
     {
+        /// <summary>
+        /// Gets or Sets the IdentityId of the User
+        /// </summary>
         public Guid IdentityId { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the CategoryId
+        /// </summary>
         public Guid CategoryId { get; set;}
+
+        /// <summary>
+        /// Allows navigation to the Category referenced by this User Category
+        /// </summary>
         public virtual Category Category { get; set;}
     }
 
@@ -22,7 +33,7 @@ namespace ExpensesTracker.API.Data.Models
             base.Configure(builder);
 
             builder.HasOne(ui => ui.Category)
-                .WithMany(i => i.UserCategories)
+                .WithMany(c => c.UserCategories)
                 .HasForeignKey(ui => ui.CategoryId)
                 .HasConstraintName("FK_Category_UserCategories");
         }

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ExpensesTracker.UI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 namespace ExpensesTracker.UI.Controllers
 {
@@ -28,6 +32,20 @@ namespace ExpensesTracker.UI.Controllers
 
         [Authorize]
         public IActionResult Privacy() => View();
+
+        [Authorize]
+        public async Task<IActionResult> CallApi()
+        {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var content = await client.GetStringAsync("https://localhost:5002/api/accounts");
+
+            ViewBag.Json = JArray.Parse(content).ToString();
+            return View("json");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

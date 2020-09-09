@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ExpensesTracker.API.Data;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -31,7 +27,7 @@ namespace ExpensesTracker.API
                 try
                 {
                     var context = services.GetRequiredService<ExpensesDbContext>();
-                    services.Initialize(context);
+                    services.InitializeDatabase(context);
                 }
                 catch (Exception ex)
                 {

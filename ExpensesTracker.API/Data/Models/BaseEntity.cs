@@ -6,6 +6,9 @@ namespace ExpensesTracker.API.Data.Models
 {
     public class BaseEntity
     {
+        /// <summary>
+        /// Identifier of the Base Entity
+        /// </summary>
         public Guid Id { get; set; }
     }
 

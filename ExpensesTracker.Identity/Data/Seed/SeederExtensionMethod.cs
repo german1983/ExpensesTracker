@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ExpensesTracker.Identity.Data.Context;
+using ExpensesTracker.Identity.Data.Model;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -11,7 +13,7 @@ namespace ExpensesTracker.Identity.Data.Seed
 {
     public static class SeederExtensionMethod
     {
-        internal static void InitializeDbTestData(this IApplicationBuilder app)
+        internal static void InitializeDb(this IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
 
@@ -57,17 +59,18 @@ namespace ExpensesTracker.Identity.Data.Seed
                 context.SaveChanges();
             }
 
-            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             if (!userManager.Users.Any())
             {
                 foreach (var testUser in Users.Get())
                 {
-                    var identityUser = new IdentityUser(testUser.Username)
+                    var identityUser = new ApplicationUser()
                     {
-                        Id = testUser.SubjectId
+                        Id = new Guid(testUser.SubjectId),
+                        UserName = testUser.Username
                     };
 
-                    userManager.CreateAsync(identityUser, "Password123!").Wait();
+                    userManager.CreateAsync(identityUser, "Pass123$").Wait();
                     userManager.AddClaimsAsync(identityUser, testUser.Claims.ToList()).Wait();
                 }
             }
